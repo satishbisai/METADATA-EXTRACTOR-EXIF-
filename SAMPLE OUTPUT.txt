@@ -1,0 +1,14 @@
+SAMPLE OUTPUT FOR META DATA EXTRACTOR:
+{
+  "file": "photo.jpg",
+  "format": "JPEG",
+  "width": 4032,
+  "height": 3024,
+  "exif": {
+    "Make": "Apple",
+    "Model": "iPhone 13",
+    "DateTimeOriginal": "2024:06:15 14:30:00",
+    "Orientation": "1",
+    "FNumber": "1.6"
+  }
+}

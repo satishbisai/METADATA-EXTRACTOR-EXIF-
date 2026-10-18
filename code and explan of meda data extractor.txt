@@ -1,0 +1,42 @@
+EXPLANATION ABOUT META DATA EXTRACTOR:
+A Metadata Extractor is a Python application that collects information about a file without focusing on the actual content of the file.
+Metadata means “data about data.”
+For example, when you take a photo using your mobile phone, the image may contain additional information, such as:
+- File name: photo.jpg
+- File format: JPEG
+- File size: 2 MB
+- Image dimensions: 1920 × 1080 pixels
+- Camera model: The device used to take the photo, if recorded
+- Date and time: When the photo was taken, if recorded in its metadata
+A metadata extractor reads this available information and displays it to the user.
+program:
+import json
+import sys
+from pathlib import Path
+from PIL import ExifTags, Image
+def extract_metadata(image_path):
+    path = Path(image_path)
+    if not path.is_file():
+        raise FileNotFoundError(f"Image not found: {path}")
+    with Image.open(path) as image:
+        exif = image.getexif()
+        return {
+            "file": path.name,
+            "format": image.format,
+            "width": image.width,
+            "height": image.height,
+            "exif": {
+                ExifTags.TAGS.get(tag_id, str(tag_id)): str(value)
+                for tag_id, value in exif.items()
+            },
+        }
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python exif_extractor.py <image-file>")
+        raise SystemExit(1)
+    try:
+        metadata = extract_metadata(sys.argv[1])
+        print(json.dumps(metadata, indent=2))
+    except Exception as error:
+        print(f"Error: {error}", file=sys.stderr)
+        raise SystemExit(1)
